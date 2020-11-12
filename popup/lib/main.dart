@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:popup_window/popup_window.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Demo pop-up window',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -26,10 +27,12 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo pop-up window'),
     );
   }
 }
+// Window height
+const double windowHeight = 200;
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -76,42 +79,66 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: <Widget>[
+          PopupWindowButton(
+            offset: Offset(0, windowHeight),
+            buttonBuilder: (BuildContext context) {
+              return PopupWindowBtn();
+            },
+            windowBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SizeTransition(
+                  sizeFactor: animation,
+                  child: Container(
+                    color: Colors.redAccent,
+                    height: windowHeight,
+                  ),
+                ),
+              );
+            },
+            onWindowShow: () {
+              print('PopupWindow button window show');
+            },
+            onWindowDismiss: () {
+              print('PopupwindowButton window dismiss');
+            }
+          )
+        ],
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: Text(
+          'Pop-up Window, click share icon :D',
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class PopupWindowBtn extends StatefulWidget {
+  @override
+  _PopupWindowBtnState createState() => _PopupWindowBtnState();
+}
+
+class _PopupWindowBtnState extends State<PopupWindowBtn> {
+  bool _autoShowDialog = false;
+  String test = "hoera";
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_autoShowDialog) {
+        _autoShowDialog = false;
+        PopupWindowButton.of(context).showPopupWindow();
+      }
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //return Image(image: AssetImage("images/ic_share.png"));
+    return Image.asset('assets/images/ic_share.png');
   }
 }
