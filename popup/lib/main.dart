@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   }
 }
 // Window height
-const double windowHeight = 200;
+const double windowHeight = 400;
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -92,8 +92,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SizeTransition(
                   sizeFactor: animation,
                   child: Container(
-                    color: Colors.redAccent,
+                    color: Colors.pinkAccent,
                     height: windowHeight,
+                    child: Text(
+                      'Dit is een voorbeeld van een pop-up window',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
                   ),
                 ),
               );
