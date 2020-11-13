@@ -139,6 +139,6 @@ class _PopupWindowBtnState extends State<PopupWindowBtn> {
   @override
   Widget build(BuildContext context) {
     //return Image(image: AssetImage("images/ic_share.png"));
-    return Image.asset('assets/images/ic_share.png');
+    return Image.asset('assets/images/1.0x/ic_share.png');
   }
 }
